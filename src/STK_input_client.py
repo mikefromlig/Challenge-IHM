@@ -11,11 +11,10 @@ from time import sleep
 address = ('localhost', 6006)
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-sleep(3)
-data = b'rLEFT'
+data = b'LEFT'
 client_socket.sendto(data, address)
 sleep(3)
-data = b'pLEFT'
+data = b'SELECT'
 client_socket.sendto(data, address)
 sleep(3)
 data = b'STOPSERVEUR'

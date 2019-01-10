@@ -22,6 +22,35 @@ address     = ('localhost', 6006)
 sock        = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind(address)
 
+#list of tuples: (received command, keyboard key, keyboard func )
+bindings    = [ ['UP', 'up', keyboard.press_and_release],
+                ['DOWN', 'down', keyboard.press_and_release],
+                ['LEFT', 'left', keyboard.press_and_release],
+                ['RIGHT', 'right', keyboard.press_and_release],
+                ['SELECT', 'enter', keyboard.press_and_release],
+                ['CANCEL', 'backspace', keyboard.press_and_release],
+                ['BACK', 'backspace', keyboard.press_and_release],
+                ['FIRE', 'space', keyboard.press_and_release],
+                ['NITRO', 'n', keyboard.press_and_release],
+                ['SKIDDING', 'v', keyboard.press_and_release],
+                ['LOOKBACK', 'b', keyboard.press_and_release],
+                ['RESCUE', 'backspace', keyboard.press_and_release],
+                ['PAUSE', 'escape', keyboard.press_and_release],
+                ['P_UP', 'up', keyboard.press],
+                ['R_UP', 'up', keyboard.release],
+                ['P_DOWN', 'down', keyboard.press],
+                ['R_DOWN', 'down', keyboard.release],
+                ['P_LEFT', 'left', keyboard.press],
+                ['R_LEFT', 'left', keyboard.release],
+                ['P_RIGHT', 'right', keyboard.press],
+                ['R_RIGHT', 'right', keyboard.release],
+                ['P_ACCELERATE', 'up', keyboard.press],
+                ['R_ACCELERATE', 'up', keyboard.release],
+                ['P_BRAKE', 'down', keyboard.press],
+                ['R_BRAKE', 'down', keyboard.release]
+                ]
+
+commands = [b[0] for b in bindings]
 
 ###############################################################################
 ## Main
@@ -33,15 +62,8 @@ if len(sys.argv) > 1:
 
 print()
 print('STK input server started ', end='')
-if DEBUG:
-    print(GREEN+'(Debug mode)'+WHITE)
-else:
-    print()
-
-commands    = [ 'UP', 'DOWN', 'LEFT', 'RIGHT', 'SELECT', 'CANCEL', 'BACK', 'ACCELERATE', 'BRAKE',
-                'FIRE', 'NITRO', 'SKIDDING', 'LOOKBACK', 'RESCUE', 'PAUSE']
-keys        = ['up', 'down', 'left', 'right', 'enter', 'backspace', 'backspace', 'up', 'down',
-                'space', 'n', 'v', 'b', 'backspace', 'escape']
+if DEBUG:   print(GREEN+'(Debug mode)'+WHITE)
+else:       print()
 
 while (not stop):
     data, addr = sock.recvfrom(1024)
@@ -51,14 +73,10 @@ while (not stop):
     if data == 'STOPSERVEUR':
         stop = True
     else:
-        comm = data[1:]
-        func = data[0]
-        if comm in commands:
+        if data in commands:
             if DEBUG: print(YELLOW+'\t'+data+WHITE)
-            if func == 'p':
-                keyboard.press(keys[commands.index(comm)])
-            else:
-                keyboard.release(keys[commands.index(comm)])
+            b = bindings[commands.index(data)]
+            b[2](b[1])
         else:
             if DEBUG: print(RED+'\t'+data+WHITE+' (Unknown)')
 
