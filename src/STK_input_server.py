@@ -35,7 +35,7 @@ bindings    = [ ['UP', 'up', keyboard.press_and_release],
                 ['P_SKIDDING', 'v', keyboard.press],
                 ['R_SKIDDING', 'v', keyboard.release],
                 ['P_LOOKBACK', 'b', keyboard.press],
-		['R_LOOKBACK', 'b', keyboard.release],
+                ['R_LOOKBACK', 'b', keyboard.release],
                 ['RESCUE', 'backspace', keyboard.press_and_release],
                 ['PAUSE', 'escape', keyboard.press_and_release],
                 ['P_UP', 'up', keyboard.press],
@@ -70,7 +70,7 @@ else:       print()
 while (not stop):
     data, addr = sock.recvfrom(1024)
     if type(data) is bytes:
-        data = data.decode("utf-8")
+        data = data.decode("utf-8").replace(',','')
 
     if data == 'STOPSERVEUR':
         stop = True
